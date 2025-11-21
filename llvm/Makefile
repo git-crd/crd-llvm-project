@@ -6,8 +6,8 @@ LLVM_FLAGS		:= -DLLVM_TARGETS_TO_BUILD="X86" \
 					-DLLVM_BUILD_EXAMPLES=ON \
 					-DLLVM_INCLUDE_EXAMPLES=ON \
 
-RELEASE_DIR		:= $(BUILD_DIR)/release
-DEBUG_DIR		:= $(BUILD_DIR)/debug
+RELEASE_DIR		:= release
+DEBUG_DIR		:= debug
 
 # 可执行程序路径
 # EXECUTABLE := $(BUILD_DIR)/release/bin/myapp$(if $(filter Windows_NT,$(OS)),.exe,)
@@ -25,17 +25,17 @@ all: release_llvm
 
 # 配置并构建发布版本
 run: debug_llvm
-	@./$(DEBUG_DIR)/bin/Kaleidoscope-Ch2
+	@./$(DEBUG_DIR)/bin/Kaleidoscope-Ch3
 
 release_llvm:
 	@mkdir -p $(RELEASE_DIR)
-	@cd $(RELEASE_DIR) && $(CMAKE) -G Ninja -DCMAKE_BUILD_TYPE=Release $(LLVM_FLAGS) ../..  # 添加模块支持
+	@cd $(RELEASE_DIR) && $(CMAKE) -G Ninja -DCMAKE_BUILD_TYPE=Release $(LLVM_FLAGS) ..  # 添加模块支持
 	@cd $(RELEASE_DIR) && ninja
 
 debug_llvm:
 	@mkdir -p $(DEBUG_DIR)
-	@cd $(DEBUG_DIR) && $(CMAKE) -G Ninja -DCMAKE_BUILD_TYPE=Debug $(LLVM_FLAGS) ../..  # 添加模块支持
-	@cd $(DEBUG_DIR) && ninja -j 5
+	@cd $(DEBUG_DIR) && $(CMAKE) -G Ninja -DCMAKE_BUILD_TYPE=Debug $(LLVM_FLAGS) ..  # 添加模块支持
+	@cd $(DEBUG_DIR) && ninja -j 4
 	
 clean_llvm:
 	@[ -d $(RELEASE_DIR) ] && $(BUILD_TOOL) -C $(RELEASE_DIR) clean || true
